@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedCube</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white: #ffffff;
+      --off-white: #f8f9fb;
+      --border: #e4e8ef;
+      --border-light: #f0f3f7;
+      --text-primary: #0f1c2e;
+      --text-secondary: #4a5568;
+      --text-muted: #8a96a8;
+      --accent: #1a6bff;
+      --accent-light: #e8f0ff;
+      --accent-hover: #0f52cc;
+      --success: #0f9b6a;
+      --success-light: #e6f7f2;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --error: #dc2626;
+      --error-light: #fef2f2;
+      --admin: #7c3aed;
+      --admin-light: #f3f0ff;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.04);
+      --radius: 10px;
+      --radius-sm: 6px;
+      --radius-lg: 16px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--off-white);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ── AUTH PAGE ── */
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f8f9fb 0%, #eef2ff 100%);
+      padding: 24px;
+    }
+
+    .auth-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 400px;
+      padding: 40px;
+    }
+
+    .auth-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .auth-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+    }
+
+    .auth-logo-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
+      color: var(--text-primary);
+    }
+
+    .auth-logo-text span {
+      color: var(--accent);
+    }
+
+    .auth-title { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+    .auth-subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; }
+
+    /* ── FORMS ── */
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text-primary);
+      background: var(--white);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(26, 107, 255, 0.1);
+    }
+
+    select.form-input { cursor: pointer; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      width: 100%;
+      padding: 12px;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn-secondary {
+      background: var(--off-white);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: var(--border-light); }
+
+    .btn-danger {
+      background: var(--error-light);
+      color: var(--error);
+      border: 1px solid #fecaca;
+    }
+    .btn-danger:hover { background: #fecaca; }
+
+    .btn-sm { padding: 6px 12px; font-size: 13px; }
+
+    /* ── ALERTS ── */
+    .alert {
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .alert-error { background: var(--error-light); color: var(--error); border: 1px solid #fecaca; }
+    .alert-success { background: var(--success-light); color: var(--success); border: 1px solid #a7f3d0; }
+
+    /* ── APP LAYOUT ── */
+    .app { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 240px;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
+    }
+
+    .sidebar-logo {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-logo-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--text-primary);
+    }
+
+    .sidebar-logo-text span { color: var(--accent); }
+
+    .sidebar-nav { padding: 16px 12px; flex: 1; }
+
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      padding: 0 8px;
+      margin-bottom: 6px;
+      margin-top: 16px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.12s;
+      margin-bottom: 2px;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-item:hover { background: var(--off-white); color: var(--text-primary); }
+    .nav-item.active { background: var(--accent-light); color: var(--accent); }
+    .nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+    .sidebar-footer {
+      padding: 16px 12px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .user-name { font-size: 13px; font-weight: 600; }
+    .user-role {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: capitalize;
+    }
+
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .role-badge.admin { background: var(--admin-light); color: var(--admin); }
+    .role-badge.doctor { background: var(--accent-light); color: var(--accent); }
+
+    /* ── MAIN CONTENT ── */
+    .main-content {
+      margin-left: 240px;
+      flex: 1;
+      padding: 32px;
+      max-width: calc(100vw - 240px);
+    }
+
+    .page-header { margin-bottom: 28px; }
+    .page-title { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+    .page-subtitle { font-size: 14px; color: var(--text-muted); }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title { font-size: 15px; font-weight: 600; }
+    .card-body { padding: 20px; }
+
+    /* ── SEARCH PAGE ── */
+    .search-bar-wrap {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .search-bar-wrap .form-input {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 15px;
+    }
+
+    .search-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .search-btn:hover { background: var(--accent-hover); }
+    .search-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .filters-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .filter-input {
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text-primary);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .filter-input:focus { border-color: var(--accent); }
+    .filter-input::placeholder { color: var(--text-muted); }
+
+    .summary-box {
+      background: linear-gradient(135deg, #f0f7ff, #e8f0ff);
+      border: 1px solid #c7d9ff;
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .summary-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .summary-text { font-size: 14px; line-height: 1.7; color: var(--text-primary); }
+
+    .results-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .meta-pill {
+      background: var(--off-white);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 3px 10px;
+      font-size: 12px;
+    }
+
+    .result-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 10px;
+      background: var(--white);
+      transition: box-shadow 0.15s;
+    }
+    .result-card:hover { box-shadow: var(--shadow-md); }
+
+    .result-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .result-source {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+
+    .result-page {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .result-text { font-size: 13px; line-height: 1.6; color: var(--text-secondary); }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--text-muted);
+    }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-title { font-size: 15px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; }
+    .empty-desc { font-size: 13px; }
+
+    /* ── UPLOAD PAGE ── */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: var(--off-white);
+    }
+
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .upload-icon { font-size: 36px; margin-bottom: 12px; }
+    .upload-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .upload-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+
+    .upload-history { margin-top: 24px; }
+
+    .upload-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .upload-item-icon { font-size: 20px; }
+    .upload-item-name { font-size: 14px; font-weight: 500; flex: 1; }
+    .upload-item-status {
+      font-size: 12px;
+      padding: 2px 10px;
+      border-radius: 99px;
+    }
+    .status-success { background: var(--success-light); color: var(--success); }
+    .status-uploading { background: var(--warning-light); color: var(--warning); }
+    .status-error { background: var(--error-light); color: var(--error); }
+
+    /* ── ADMIN PAGE ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-label { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-bottom: 8px; }
+    .stat-value { font-size: 28px; font-weight: 700; }
+    .stat-value.blue { color: var(--accent); }
+    .stat-value.green { color: var(--success); }
+    .stat-value.purple { color: var(--admin); }
+
+    .users-table { width: 100%; border-collapse: collapse; }
+    .users-table th {
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--off-white);
+    }
+    .users-table td {
+      padding: 12px 16px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .users-table tr:last-child td { border-bottom: none; }
+    .users-table tr:hover td { background: var(--off-white); }
+
+    .user-status-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
+    }
+    .dot-active { background: var(--success); }
+    .dot-inactive { background: var(--text-muted); }
+
+    /* ── REGISTER MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 24px;
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 440px;
+      padding: 32px;
+    }
+
+    .modal-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; }
+
+    /* ── LOADING ── */
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-bar {
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), #60a5fa);
+      border-radius: 99px;
+      animation: loading 1.5s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes loading {
+      0% { width: 0%; margin-left: 0; }
+      50% { width: 60%; margin-left: 20%; }
+      100% { width: 0%; margin-left: 100%; }
+    }
+
+    .divider { height: 1px; background: var(--border-light); margin: 20px 0; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; max-width: 100vw; padding: 20px; }
+      .filters-row { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+const API = 'http://127.0.0.1:8000';
+
+// ── STATE ──
+let state = {
+  page: 'login',
+  token: localStorage.getItem('mc_token'),
+  user: JSON.parse(localStorage.getItem('mc_user') || 'null'),
+  searchResults: null,
+  searchLoading: false,
+  uploadHistory: [],
+  users: [],
+  showRegisterModal: false,
+  error: '',
+  success: '',
+};
+
+function setState(patch) {
+  Object.assign(state, patch);
+  render();
+}
+
+// ── API HELPERS ──
+async function api(method, path, body, isForm = false) {
+  const headers = {};
+  if (state.token) headers['Authorization'] = `Bearer ${state.token}`;
+  if (!isForm) headers['Content-Type'] = 'application/json';
+
+  const res = await fetch(API + path, {
+    method,
+    headers,
+    body: isForm ? body : (body ? JSON.stringify(body) : undefined),
+  });
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.detail || 'Request failed');
+  return data;
+}
+
+// ── AUTH ──
+async function login(username, password) {
+  setState({ error: '' });
+  try {
+    const form = new URLSearchParams({ username, password });
+    const data = await api('POST', '/token', form, true);
+    localStorage.setItem('mc_token', data.access_token);
+    const user = { username: data.username, role: data.role };
+    localStorage.setItem('mc_user', JSON.stringify(user));
+    setState({ token: data.access_token, user, page: 'search', success: '' });
+  } catch (e) {
+    setState({ error: e.message });
+  }
+}
+
+function logout() {
+  localStorage.removeItem('mc_token');
+  localStorage.removeItem('mc_user');
+  setState({ token: null, user: null, page: 'login', searchResults: null });
+}
+
+// ── SEARCH ──
+async function search(query, filters) {
+  setState({ searchLoading: true, searchResults: null, error: '' });
+  try {
+    const params = new URLSearchParams({ user_query: query });
+    if (filters.dept) params.append('dept', filters.dept);
+    if (filters.doc) params.append('doc', filters.doc);
+    if (filters.issue) params.append('issue', filters.issue);
+    if (filters.meds) params.append('meds', filters.meds);
+    if (filters.patient) params.append('patient', filters.patient);
+    const data = await api('GET', `/search?${params}`);
+    setState({ searchResults: data, searchLoading: false });
+  } catch (e) {
+    setState({ error: e.message, searchLoading: false });
+  }
+}
+
+// ── UPLOAD ──
+async function uploadFile(file) {
+  const entry = { name: file.name, status: 'uploading' };
+  setState({ uploadHistory: [entry, ...state.uploadHistory] });
+  try {
+    const form = new FormData();
+    form.append('file', file);
+    await api('POST', '/upload', form, true);
+    entry.status = 'success';
+    setState({ uploadHistory: [...state.uploadHistory] });
+  } catch (e) {
+    entry.status = 'error';
+    entry.error = e.message;
+    setState({ uploadHistory: [...state.uploadHistory], error: e.message });
+  }
+}
+
+// ── ADMIN ──
+async function loadUsers() {
+  try {
+    const data = await api('GET', '/admin/users');
+    setState({ users: data });
+  } catch (e) {
+    setState({ error: e.message });
+  }
+}
+
+async function registerUser(formData) {
+  try {
+    await api('POST', '/register', formData);
+    setState({ showRegisterModal: false, success: 'Doctor account created successfully.' });
+    loadUsers();
+  } catch (e) {
+    setState({ error: e.message });
+  }
+}
+
+async function deactivateUser(username) {
+  if (!confirm(`Deactivate ${username}?`)) return;
+  try {
+    await api('DELETE', `/admin/users/${username}`);
+    setState({ success: `${username} has been deactivated.` });
+    loadUsers();
+  } catch (e) {
+    setState({ error: e.message });
+  }
+}
+
+// ── COMPONENTS ──
+function Logo() {
+  return `
+    <div class="auth-logo">
+      <div class="auth-logo-icon">✚</div>
+      <div class="auth-logo-text">Med<span>Cube</span></div>
+    </div>`;
+}
+
+function SidebarLogo() {
+  return `
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">✚</div>
+      <div class="sidebar-logo-text">Med<span>Cube</span></div>
+    </div>`;
+}
+
+function Alert(msg, type = 'error') {
+  if (!msg) return '';
+  const icon = type === 'error' ? '⚠' : '✓';
+  return `<div class="alert alert-${type}">${icon} ${msg}</div>`;
+}
+
+function Sidebar() {
+  const isAdmin = state.user?.role === 'admin';
+  const nav = [
+    { id: 'search', icon: '🔍', label: 'Search Records' },
+    { id: 'upload', icon: '📄', label: 'Upload PDF' },
+  ];
+  if (isAdmin) nav.push({ id: 'admin', icon: '⚙', label: 'Admin Panel' });
+
+  return `
+    <div class="sidebar">
+      ${SidebarLogo()}
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Navigation</div>
+        ${nav.map(n => `
+          <button class="nav-item ${state.page === n.id ? 'active' : ''}"
+            onclick="navigateTo('${n.id}')">
+            <span class="nav-icon">${n.icon}</span>${n.label}
+          </button>`).join('')}
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">${state.user?.username?.[0]?.toUpperCase()}</div>
+          <div>
+            <div class="user-name">${state.user?.username}</div>
+            <div class="user-role">
+              <span class="role-badge ${state.user?.role}">${state.user?.role}</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-sm" style="width:100%" onclick="logout()">
+          Sign out
+        </button>
+      </div>
+    </div>`;
+}
+
+function LoginPage() {
+  return `
+    <div class="auth-page">
+      <div class="auth-card">
+        ${Logo()}
+        <div class="auth-title">Sign in to MedCube</div>
+        <div class="auth-subtitle">Access your medical records system</div>
+        ${Alert(state.error)}
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input class="form-input" type="text" id="login-username" placeholder="Enter username" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="login-password" placeholder="Enter password"
+            onkeydown="if(event.key==='Enter') handleLogin()" />
+        </div>
+        <button class="btn btn-primary" onclick="handleLogin()">Sign in</button>
+      </div>
+    </div>`;
+}
+
+function SearchPage() {
+  const r = state.searchResults;
+  return `
+    <div class="main-content">
+      <div class="page-header">
+        <div class="page-title">Search Medical Records</div>
+        <div class="page-subtitle">Query uploaded PDFs using natural language</div>
+      </div>
+      ${Alert(state.error)}
+      ${Alert(state.success, 'success')}
+
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-body">
+          <div class="search-bar-wrap">
+            <input class="form-input" type="text" id="search-query"
+              placeholder="e.g. What is the recommended treatment for hypertension?"
+              onkeydown="if(event.key==='Enter') handleSearch()" />
+            <button class="search-btn" onclick="handleSearch()" ${state.searchLoading ? 'disabled' : ''}>
+              ${state.searchLoading ? '<span class="spinner"></span>' : '🔍 Search'}
+            </button>
+          </div>
+          <div class="filters-row">
+            <input class="filter-input" id="f-dept" placeholder="Department" />
+            <input class="filter-input" id="f-doc" placeholder="Doctor" />
+            <input class="filter-input" id="f-issue" placeholder="Issue" />
+            <input class="filter-input" id="f-meds" placeholder="Medication" />
+            <input class="filter-input" id="f-patient" placeholder="Patient name" />
+          </div>
+        </div>
+      </div>
+
+      ${state.searchLoading ? '<div class="loading-bar"></div>' : ''}
+
+      ${r ? `
+        ${r.summary && r.summary !== 'No summary available.' ? `
+          <div class="summary-box">
+            <div class="summary-label">✦ AI Summary</div>
+            <div class="summary-text">${r.summary}</div>
+          </div>` : ''}
+
+        <div class="results-meta">
+          <span>${r.chunks_found} chunk${r.chunks_found !== 1 ? 's' : ''} found</span>
+          ${r.sources?.map(s => `<span class="meta-pill">📄 ${s}</span>`).join('') || ''}
+        </div>
+
+        ${r.results?.length ? r.results.map(res => `
+          <div class="result-card">
+            <div class="result-meta">
+              <span class="result-source">${res.file_name || 'Unknown'}</span>
+              ${res.page_number ? `<span class="result-page">Page ${res.page_number}</span>` : ''}
+            </div>
+            <div class="result-text">${res.text}</div>
+          </div>`).join('') : `
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <div class="empty-title">No results found</div>
+            <div class="empty-desc">Try adjusting your query or filters</div>
+          </div>`}
+      ` : !state.searchLoading ? `
+        <div class="empty-state">
+          <div class="empty-icon">🩺</div>
+          <div class="empty-title">Ask a medical question</div>
+          <div class="empty-desc">Search across all uploaded medical PDFs</div>
+        </div>` : ''}
+    </div>`;
+}
+
+function UploadPage() {
+  return `
+    <div class="main-content">
+      <div class="page-header">
+        <div class="page-title">Upload Medical PDFs</div>
+        <div class="page-subtitle">Files are chunked, embedded, and indexed automatically</div>
+      </div>
+      ${Alert(state.error)}
+      ${Alert(state.success, 'success')}
+
+      <div class="card">
+        <div class="card-body">
+          <div class="upload-zone" id="drop-zone"
+            onclick="document.getElementById('file-input').click()"
+            ondragover="event.preventDefault(); this.classList.add('dragover')"
+            ondragleave="this.classList.remove('dragover')"
+            ondrop="handleDrop(event)">
+            <div class="upload-icon">📄</div>
+            <div class="upload-title">Drop PDF or TXT files here</div>
+            <div class="upload-desc">or click to browse</div>
+            <button class="btn btn-secondary" onclick="event.stopPropagation(); document.getElementById('file-input').click()">
+              Choose file
+            </button>
+          </div>
+          <input type="file" id="file-input" accept=".pdf,.txt" style="display:none"
+            onchange="handleFileSelect(this)" />
+
+          ${state.uploadHistory.length ? `
+            <div class="upload-history">
+              <div class="divider"></div>
+              <div style="font-size:13px;font-weight:600;margin-bottom:12px">Upload history</div>
+              ${state.uploadHistory.map(f => `
+                <div class="upload-item">
+                  <span class="upload-item-icon">📄</span>
+                  <span class="upload-item-name">${f.name}</span>
+                  <span class="upload-item-status status-${f.status}">
+                    ${f.status === 'uploading' ? '⏳ Indexing...' :
+                      f.status === 'success' ? '✓ Indexed' : '✗ Failed'}
+                  </span>
+                </div>`).join('')}
+            </div>` : ''}
+        </div>
+      </div>
+    </div>`;
+}
+
+function AdminPage() {
+  const total = state.users.length;
+  const active = state.users.filter(u => u.is_active).length;
+  const doctors = state.users.filter(u => u.role === 'doctor').length;
+
+  return `
+    <div class="main-content">
+      <div class="page-header">
+        <div class="page-title">Admin Panel</div>
+        <div class="page-subtitle">Manage user accounts and system access</div>
+      </div>
+      ${Alert(state.error)}
+      ${Alert(state.success, 'success')}
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Users</div>
+          <div class="stat-value blue">${total}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Active Users</div>
+          <div class="stat-value green">${active}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Doctors</div>
+          <div class="stat-value purple">${doctors}</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">User Accounts</div>
+          <button class="btn btn-primary btn-sm" onclick="setState({showRegisterModal:true, error:'', success:''})">
+            + Add Doctor
+          </button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="users-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Joined</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${state.users.length ? state.users.map(u => `
+                <tr>
+                  <td><strong>${u.full_name}</strong><br>
+                    <span style="font-size:12px;color:var(--text-muted)">@${u.username}</span>
+                  </td>
+                  <td style="color:var(--text-secondary)">${u.email}</td>
+                  <td><span class="role-badge ${u.role}">${u.role}</span></td>
+                  <td>
+                    <span class="user-status-dot ${u.is_active ? 'dot-active' : 'dot-inactive'}"></span>
+                    ${u.is_active ? 'Active' : 'Inactive'}
+                  </td>
+                  <td style="color:var(--text-muted);font-size:13px">
+                    ${new Date(u.created_at).toLocaleDateString()}
+                  </td>
+                  <td>
+                    ${u.is_active && u.role !== 'admin' ? `
+                      <button class="btn btn-danger btn-sm" onclick="deactivateUser('${u.username}')">
+                        Deactivate
+                      </button>` : '—'}
+                  </td>
+                </tr>`).join('') : `
+                <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted)">
+                  No users found
+                </td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      ${state.showRegisterModal ? RegisterModal() : ''}
+    </div>`;
+}
+
+function RegisterModal() {
+  return `
+    <div class="modal-overlay" onclick="if(event.target===this) setState({showRegisterModal:false})">
+      <div class="modal">
+        <div class="modal-title">Add Doctor Account</div>
+        ${Alert(state.error)}
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input class="form-input" id="reg-name" placeholder="Dr. Jane Smith" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input class="form-input" id="reg-username" placeholder="dr_smith" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" id="reg-email" placeholder="dr.smith@hospital.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="reg-password" placeholder="Minimum 8 characters" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Role</label>
+          <select class="form-input" id="reg-role">
+            <option value="doctor">Doctor</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:8px">
+          <button class="btn btn-secondary" style="flex:1"
+            onclick="setState({showRegisterModal:false})">Cancel</button>
+          <button class="btn btn-primary" style="flex:1" onclick="handleRegister()">
+            Create Account
+          </button>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── HANDLERS ──
+function handleLogin() {
+  const u = document.getElementById('login-username')?.value?.trim();
+  const p = document.getElementById('login-password')?.value;
+  if (!u || !p) return setState({ error: 'Please enter username and password.' });
+  login(u, p);
+}
+
+function handleSearch() {
+  const q = document.getElementById('search-query')?.value?.trim();
+  if (!q) return setState({ error: 'Please enter a search query.' });
+  search(q, {
+    dept: document.getElementById('f-dept')?.value,
+    doc: document.getElementById('f-doc')?.value,
+    issue: document.getElementById('f-issue')?.value,
+    meds: document.getElementById('f-meds')?.value,
+    patient: document.getElementById('f-patient')?.value,
+  });
+}
+
+function handleFileSelect(input) {
+  const file = input.files[0];
+  if (file) uploadFile(file);
+  input.value = '';
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone')?.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) uploadFile(file);
+}
+
+function handleRegister() {
+  const data = {
+    full_name: document.getElementById('reg-name')?.value?.trim(),
+    username: document.getElementById('reg-username')?.value?.trim(),
+    email: document.getElementById('reg-email')?.value?.trim(),
+    password: document.getElementById('reg-password')?.value,
+    role: document.getElementById('reg-role')?.value,
+  };
+  if (!data.full_name || !data.username || !data.email || !data.password) {
+    return setState({ error: 'All fields are required.' });
+  }
+  registerUser(data);
+}
+
+function navigateTo(page) {
+  setState({ page, error: '', success: '', searchResults: null });
+  if (page === 'admin') loadUsers();
+}
+
+// ── RENDER ──
+function render() {
+  const app = document.getElementById('app');
+  if (!state.token) {
+    app.innerHTML = LoginPage();
+    return;
+  }
+
+  let content = '';
+  if (state.page === 'search') content = SearchPage();
+  else if (state.page === 'upload') content = UploadPage();
+  else if (state.page === 'admin' && state.user?.role === 'admin') content = AdminPage();
+  else content = SearchPage();
+
+  app.innerHTML = Sidebar() + content;
+}
+
+// ── INIT ──
+if (state.token && state.user) {
+  state.page = 'search';
+} else {
+  state.page = 'login';
+}
+render();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./uploaded_pdfs:/app/uploaded_pdfs
+      - ./logs:/app/logs
+    depends_on:
+      db:
+        condition: service_healthy    # ← waits until DB is actually ready
+    restart: on-failure               # ← retries if it fails
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Fuckmebro
+      POSTGRES_DB: medcube
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:                      # ← tells Docker when DB is truly ready
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
